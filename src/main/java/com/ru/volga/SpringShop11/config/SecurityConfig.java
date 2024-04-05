@@ -22,28 +22,28 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
-
     private UserService userService;
 
-    public SecurityConfig(@Lazy UserService userService){
+    public SecurityConfig(@Lazy UserService userService) {
         this.userService = userService;
     }
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         daoAuthenticationProvider.setUserDetailsService(userService);
@@ -66,13 +66,10 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/")
                         .permitAll())
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/users").hasAnyAuthority(Role.ADMIN.name())
+                                .requestMatchers("/users").hasAnyAuthority(Role.ADMIN.name())
 //                        .requestMatchers("/users/new").hasAnyAuthority(Role.ADMIN.name())
-                        .anyRequest().permitAll()
-
+                                .anyRequest().permitAll()
                 );
         return http.build();
     }
-
-
 }

@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+
 @Mapper
 public interface ProductMapper {
     ProductMapper MAPPER = Mappers.getMapper(ProductMapper.class);
@@ -15,6 +16,7 @@ public interface ProductMapper {
     @Mapping(target = "name", source = "name")
     @Mapping(target = "price", source = "price")
     @Mapping(target = "description", source = "description")
+    @Mapping(target = "amount", source = "amount")
     Product toProduct(ProductDTO dto);
 
     @InheritConfiguration

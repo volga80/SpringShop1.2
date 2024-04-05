@@ -19,32 +19,34 @@ public class BucketServiceImpl implements BucketService {
     private final BucketRepository bucketRepository;
     private final ProductRepository productRepository;
     private final UserService userService;
+    private final OrderService orderService;
 
-    public BucketServiceImpl(BucketRepository bucketRepository, ProductRepository productRepository, UserService userService) {
+    public BucketServiceImpl(BucketRepository bucketRepository, ProductRepository productRepository, UserService userService, OrderService orderService) {
         this.bucketRepository = bucketRepository;
         this.productRepository = productRepository;
         this.userService = userService;
+        this.orderService = orderService;
     }
 
-
     @Override
-    public Bucket getBucketByUser(String name){
+    public Bucket getBucketByUser(String name) {
         User user = userService.findByName(name);
         Bucket bucket = user.getBucket();
         return bucket;
     }
+
     @Override
     public BucketDTO getBucketDTOByUser(String name) {
         User user = userService.findByName(name);
-        if(user == null || user.getBucket() == null){
+        if (user == null || user.getBucket() == null) {
             return new BucketDTO();
         }
         BucketDTO bucketDTO = new BucketDTO();
         Map<Long, BucketDetailDTO> mapByProductId = new HashMap<>();
-        List<Product> products = user.getBucket().getProducts();
-        for (Product product : products){
+        List<Product> products = user.getBucket().getBucketProducts();
+        for (Product product : products) {
             BucketDetailDTO detail = mapByProductId.get(product.getId());
-            if(detail == null){
+            if (detail == null) {
                 mapByProductId.put(product.getId(), new BucketDetailDTO(product));
             } else {
                 detail.setAmount(detail.getAmount().add(new BigDecimal(1.0)));
@@ -57,39 +59,49 @@ public class BucketServiceImpl implements BucketService {
         return bucketDTO;
     }
 
-
     @Override
     @Transactional
-    public Bucket createBucket(User user, List<Long> productIds){
+    public Bucket createBucket(User user, List<Long> productIds) {
         Bucket bucket = new Bucket();
         bucket.setUser(user);
         List<Product> productList = getCollectRefProductsByIds(productIds);
-        bucket.setProducts(productList);
+        bucket.setBucketProducts(productList);
         return bucketRepository.saveAndFlush(bucket);
     }
 
-    private List<Product> getCollectRefProductsByIds(List<Long> productIds){
+    private List<Product> getCollectRefProductsByIds(List<Long> productIds) {
         return productIds.stream()
                 .map(productRepository::getOne)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void addProducts(Bucket bucket, List<Long> productIds){
-        List<Product> products = bucket.getProducts();
-        List<Product> newProductList = products == null ? new ArrayList<>() : new ArrayList<>(products);
-        newProductList.addAll(getCollectRefProductsByIds(productIds));
-        bucket.setProducts(newProductList);
+    public void addProducts(Bucket bucket, List<Long> productIds) {
+//        List<Product> products =
+        bucket.getBucketProducts().addAll(getCollectRefProductsByIds(productIds));
+//        List<Product> newProductList = products == null ? new ArrayList<>() : new ArrayList<>(products);
+//        newProductList.addAll(getCollectRefProductsByIds(productIds));
+//        bucket.setProducts(newProductList);
         bucketRepository.save(bucket);
     }
+    //todo посмотреть почему создается список каждый раз   +
 
     @Override
     @Transactional
-    public void deleteOneProduct(Long bucketId, Long productId) {
+    public void removeOneProduct(Long bucketId, Long productId) {
         Bucket bucket = bucketRepository.findById(bucketId).orElseThrow(() -> new RuntimeException("Bucket not found"));
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
-
-        bucket.getProducts().remove(product);
+        bucket.getBucketProducts().remove(product);
         bucketRepository.save(bucket);
     }
+    // todo название метода -> remove   +
+
+    @Override
+    @Transactional
+    public void removeAllProducts(String userName){
+        User user = userService.findByName(userName);
+        orderService.createOrder(user);
+        user.getBucket().setBucketProducts(new ArrayList<>());
+        bucketRepository.save(user.getBucket());
     }
+}

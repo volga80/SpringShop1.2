@@ -1,4 +1,5 @@
 package com.ru.volga.SpringShop11.domain;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,6 @@ import java.math.BigDecimal;
 @Table(name = "orders_details")
 public class OrderDetails {
     private static final String SEQ_NAME = "order_details_seq";
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
     @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)

@@ -21,7 +21,7 @@
     <td th:text="${detail.amount}">2</td>
     <td th:text="${detail.price}">11.0</td>
     <td th:text="${detail.sum}">22</td>
-    <form th:action="@{/remove}" method="post">
+    <form th:action="@{/bucket/remove}" method="post">
     <td>
       <input type="hidden" name="bucketId" th:value="${bucket.id}">
       <input type="hidden" name="productId" th:value="${detail.productId}">
@@ -29,6 +29,19 @@
     </td>
     </form>
   </tr>
+  <tr>
+    <td th:text="Total"></td>
+    <td></td>
+    <td></td>
+    <td th:text="${bucketDTO.sum}"></td>
+    <td>
+      <form th:action="@{/bucket/orders}" method="post">
+      <input type="hidden" name="bucketDTO" th:value="${bucketDTO}">
+      <button type="submit">Checkout</button>
+      </form>
+    </td>
+  </tr>
+
 </table>
 </body>
 </html>

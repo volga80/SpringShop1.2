@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -16,9 +17,8 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "products")
-public class Product {
+public class Product implements Serializable {
     private static final String SEQ_NAME = "product_seq";
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
     @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
@@ -32,5 +32,5 @@ public class Product {
     private List<Category> categories;
     private String description;
     private String period;
-
+    private int amount;
 }

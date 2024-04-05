@@ -17,6 +17,7 @@
           <td sec:authorize="hasAnyAuthority('ADMIN')"><a th:href="@{/users}">Users</a></td>
           <td sec:authorize="isAuthenticated()"><a th:href="@{/bucket}">Bucket</a></td>
           <td sec:authorize="hasAnyAuthority('ADMIN')"><a th:href="@{/products/new}">Add product</a></td>
+          <td sec:authorize="isAuthenticated()"><a th:href="@{/orders}">Orders</a></td>
         </tr>
       </table>
     </td>

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,7 +17,7 @@ public class BucketDTO {
     private Double sum;
     private List<BucketDetailDTO> bucketDetails = new ArrayList<>();
 
-    public void aggregate(){
+    public void aggregate() {
         this.amountProducts = bucketDetails.size();
         this.sum = bucketDetails.stream()
                 .map(BucketDetailDTO::getSum)

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class BucketDetailDTO {
     private BigDecimal amount;
     private Double sum;
 
-    public BucketDetailDTO(Product product){
+    public BucketDetailDTO(Product product) {
         this.name = product.getName();
         this.productId = product.getId();
         this.price = product.getPrice();

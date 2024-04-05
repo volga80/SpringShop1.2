@@ -18,24 +18,24 @@ import java.util.Objects;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping
-    public String userList(Model model){
-        LOGGER.info("Использование метода userList");
+    public String userList(Model model) {
+//        LOGGER.info("Использование метода userList");
         model.addAttribute("users", userService.getAll());
         return "userList";
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/new")
-    public String newUser(Model model){
+    public String newUser(Model model) {
         model.addAttribute("user", new UserDTO());
         return "user";
     }
@@ -50,21 +50,21 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/new")
-    public String saveUser(UserDTO dto, Model model){
-        if (userService.save(dto)){
+    public String saveUser(UserDTO dto, Model model) {
+        if (userService.save(dto)) {
             return "redirect:/users";
-        } else  {
+        } else {
             model.addAttribute("user", dto);
             return "user";
         }
     }
+
     @GetMapping("/profile")
-    public String profileUser(Model model, Principal principal){
+    public String profileUser(Model model, Principal principal) {
         if (principal == null) {
             throw new RuntimeException("You are not authorize");
         }
         User user = userService.findByName(principal.getName());
-
         UserDTO dto = UserDTO.builder()
                 .username(user.getName())
                 .email(user.getEmail())
@@ -74,9 +74,9 @@ public class UserController {
     }
 
     @PostMapping("/profile")
-    public String updateProfileUser(UserDTO dto, Model model, Principal principal){
-        if (principal == null || !Objects.equals(principal.getName(), dto.getUsername())){
-            throw  new RuntimeException("You are not authorize");
+    public String updateProfileUser(UserDTO dto, Model model, Principal principal) {
+        if (principal == null || !Objects.equals(principal.getName(), dto.getUsername())) {
+            throw new RuntimeException("You are not authorize");
         }
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()
                 && !Objects.equals(dto.getPassword(), dto.getMatchingPassword())) {

@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,7 +22,6 @@ import java.util.List;
 
 public class Order {
     private static final String SEQ_NAME = "order_seq";
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_NAME)
     @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
@@ -39,6 +39,10 @@ public class Order {
     private String address;
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderDetails> details;
-
+    @ManyToMany
+    @JoinTable(name = "orders_products",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private List<Product> orderProducts = new ArrayList<Product>();
 
 }

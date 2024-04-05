@@ -7,10 +7,14 @@ import java.util.List;
 
 public interface ProductService {
     List<ProductDTO> getAll();
-    void addToUserBucket(Long productId, String username);
+
+    void addToUserBucket(Long productId, String username, Integer amountToBucket);
+
     void addProduct(ProductDTO dto);
 
     boolean save(ProductDTO dto);
 
-    boolean deleteProductById(Long productId);
+    boolean setAmountProductByIdToZero(Long productId);
+
+    Product getProductById(Long productId);
 }

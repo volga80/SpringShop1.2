@@ -57,6 +57,7 @@ CREATE SEQUENCE product_seq START 1 INCREMENT 1;
 DROP TABLE IF EXISTS products CASCADE;
 
 CREATE TABLE products (
+    amount      INTEGER NOT NULL,
     price       NUMERIC(38,2),
     id          BIGINT NOT NULL,
     description VARCHAR(255),
@@ -146,4 +147,32 @@ alter table if exists orders_details
     add constraint orders_details_fk_orders_details
         foreign key (details_id) references orders_details;
 
+--соединение users и orders
+drop table if exists users_orders_list cascade;
 
+create table users_orders_list (
+orders_list_id bigint   not null unique,
+user_id bigint          not null
+);
+
+alter table if exists users_orders_list
+    add constraint  users_orders_list_fk_orders
+        foreign key (orders_list_id) references orders;
+alter table if exists users_orders_list
+    add constraint  users_orders_list_fk_users
+        foreign key (user_id) references users;
+
+--соединение orders и products
+drop table if exists orders_products cascade;
+
+create table orders_products (
+order_id bigint     not null,
+product_id bigint   not null
+);
+
+alter table if exists orders_products
+    add constraint orders_products_fk_products
+        foreign key (product_id) references products;
+alter table if exists orders_products
+    add constraint orders_product_fk_orders
+        foreign key (order_id) references orders;

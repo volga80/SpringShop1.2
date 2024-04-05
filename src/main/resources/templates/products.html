@@ -12,19 +12,31 @@
     <td>Name</td>
     <td>Price</td>
     <td>Description</td>
+    <td>Amount</td>
+    <td sec:authorize="isAuthenticated()">Amount to buy</td>
     <td sec:authorize="isAuthenticated()">Add</td>
+    <td sec:authorize="hasAnyAuthority('ADMIN')">Removing</td>
+    <td sec:authorize="hasAnyAuthority('ADMIN')">Set new amount</td>
   </tr>
   <tr th:each="product : ${products}">
     <td th:text="${product.name}">Rose</td>
     <td th:text="${product.price}">100.0</td>
     <td th:text="${product.description}">Цветок</td>
-    <td  sec:authorize="isAuthenticated()"><a th:href="@{/products/{id}/bucket(id=${product.id})}">Add to bucket</a></td>
+    <td th:text="${product.amount}">10</td>
+    <form sec:authorize="isAuthenticated()" th:action="@{/products/{id}/bucket(id=${product.id})}" method="post">
+      <td><input type="number" name="amountToBuy"></td>
+      <td><button type="submit">Add to bucket</button></td>
+    </form>
     <td sec:authorize="hasAnyAuthority('ADMIN')">
       <form th:action="@{'/products/' + ${product.id}}" method="post">
         <input type="hidden" name="_method" value="delete">
         <button type="submit">Remove product</button>
       </form>
     </td>
+    <form sec:authorize="hasAnyAuthority('ADMIN')" th:action="@{/products/{id}/newAmount(id=${product.id})}" method="post">
+      <td><input type="number" name="newAmount"></td>
+      <td><button type="submit">Set new amount</button></td>
+    </form>
 
   </tr>
 </table>
