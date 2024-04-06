@@ -29,7 +29,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Cacheable(value = "ProductService::getAll", key = "#id")
     public List<ProductDTO> getAll() {
         return mapper.fromProductList(productRepository.findAll());
     }

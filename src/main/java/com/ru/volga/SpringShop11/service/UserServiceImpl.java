@@ -7,7 +7,9 @@ import com.ru.volga.SpringShop11.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+//    @Cacheable(value = "UserService::findByUsername", key = "#name")
     public User findByUsername(String name) {
         return userRepository.findFirstByName(name);
     }
@@ -40,6 +42,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+//    @Caching(cacheable = {
+//            @Cacheable(value = "UserService::findByName", key = "#userDTO.username")
+//    })
     public boolean save(UserDTO userDTO) {
         if (!Objects.equals(userDTO.getPassword(), userDTO.getMatchingPassword())) {
             throw new RuntimeException("пароли не равны");
@@ -59,12 +64,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+//    @Cacheable(value = "UserService::save", key = "#user.name")
     public void save(User user) {
         userRepository.save(user);
     }
 
     @Override
-    @Cacheable(value = "UserService::getAll", key = "#id")
     public List<UserDTO> getAll() {
         return userRepository.findAll().stream()
                 .map(this::toDto)
@@ -87,7 +92,8 @@ public class UserServiceImpl implements UserService {
                 roles);
     }
 
-    private UserDTO toDto(User user) {
+//    @Cacheable(value = "UserService::toDto", key = "#user.name")
+    public UserDTO toDto(User user) {
         return UserDTO.builder()
                 .username(user.getName())
                 .email(user.getEmail())
@@ -95,12 +101,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+//    @Cacheable(value = "UserService::findByName", key = "#name")
     public User findByName(String name) {
         return userRepository.findFirstByName(name);
     }
 
     @Override
     @Transactional
+//    @Caching(put = {
+//            @CachePut(value = "UserService::findByName", key = "#userDTO.username")
+//    })
     public void updateProfile(UserDTO dto) {
         User savedUser = userRepository.findFirstByName(dto.getUsername());
         if (savedUser == null) {

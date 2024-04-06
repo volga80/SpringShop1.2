@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
-@EnableCaching
+//@EnableCaching
 public class Application {
 
     public static void main(String[] args) {

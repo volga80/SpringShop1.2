@@ -31,6 +31,9 @@ public class BucketServiceImpl implements BucketService {
     @Override
     public Bucket getBucketByUser(String name) {
         User user = userService.findByName(name);
+        if (user == null){
+            return null;
+        }
         Bucket bucket = user.getBucket();
         return bucket;
     }

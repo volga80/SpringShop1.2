@@ -1,4 +1,12 @@
 spring:
+  cache:
+    type: redis
+    cache-names: redis-cache
+  data:
+    redis:
+      host: redis-10621.c304.europe-west1-2.gce.cloud.redislabs.com
+      port: 10621
+      password: hNMDetrHgBRye42kel7G5TbASPWHKbGy
   jpa:
     hibernate:
       ddl-auto: validate

@@ -28,33 +28,37 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class BucketServiceImplTest {
     @InjectMocks
-    BucketServiceImpl bucketServiceImpl;
+    BucketServiceImpl mockedBucketServiceImpl;
     @Mock
-    BucketService bucketService;
+    BucketService mockedBucketService;
     @Mock
-    BucketRepository bucketRepository;
+    BucketRepository mockedBucketRepository;
     @Mock
-    ProductRepository productRepository;
+    ProductRepository mockedProductRepository;
     @Mock
-    UserRepository userRepository;
+    UserRepository mockedUserRepository;
     @Mock
-    UserService userService;
+    UserService mockedUserService;
     @Mock
-    OrderService orderService;
+    OrderService mockedOrderService;
     @Test
     void getBucketByUserTest(){
-        User user = new User();
-        Bucket bucket = new Bucket();
+        User user = User.builder()
+                .name("Andrey")
+                .build();
+        Bucket bucket = Bucket.builder()
+                .build();
         user.setBucket(bucket);
-        when(userService.findByName(any(String.class))).thenReturn(user);
+        when(mockedUserService.findByName(user.getName())).thenReturn(user);
 
-        Bucket actual = bucketService.getBucketByUser(user.getName());
+        Bucket actual = mockedBucketServiceImpl.getBucketByUser(user.getName());
 
+        assertNotNull(actual);
         assertEquals(bucket, actual);
     }
 
     @Test
     void addProductTest(){
-
+        Bucket bucket = new Bucket();
     }
 }
