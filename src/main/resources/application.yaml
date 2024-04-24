@@ -19,8 +19,8 @@ spring:
     baseline-on-migrate: true
 server:
   port: 5050
-#logging:
-#  config: classpath:log4j2.xml
+##logging:
+##  config: classpath:log4j2.xml
 logging:
   level:
     root: INFO

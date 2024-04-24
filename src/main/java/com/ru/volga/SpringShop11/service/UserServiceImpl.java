@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-//    @Cacheable(value = "UserService::findByUsername", key = "#name")
+    @Cacheable(value = "UserService::findByUsername", key = "#name")
     public User findByUsername(String name) {
         return userRepository.findFirstByName(name);
     }
@@ -42,9 +42,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-//    @Caching(cacheable = {
-//            @Cacheable(value = "UserService::findByName", key = "#userDTO.username")
-//    })
+    @Caching(cacheable = {
+            @Cacheable(value = "UserService::findByName", key = "#userDTO.username")
+    })
     public boolean save(UserDTO userDTO) {
         if (!Objects.equals(userDTO.getPassword(), userDTO.getMatchingPassword())) {
             throw new RuntimeException("пароли не равны");
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-//    @Cacheable(value = "UserService::save", key = "#user.name")
+    @Cacheable(value = "UserService::save", key = "#user.name")
     public void save(User user) {
         userRepository.save(user);
     }
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
                 roles);
     }
 
-//    @Cacheable(value = "UserService::toDto", key = "#user.name")
+    @Cacheable(value = "UserService::toDto", key = "#user.name")
     public UserDTO toDto(User user) {
         return UserDTO.builder()
                 .username(user.getName())
@@ -101,16 +101,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-//    @Cacheable(value = "UserService::findByName", key = "#name")
+    @Cacheable(value = "UserService::findByName", key = "#name")
     public User findByName(String name) {
         return userRepository.findFirstByName(name);
     }
 
     @Override
     @Transactional
-//    @Caching(put = {
-//            @CachePut(value = "UserService::findByName", key = "#userDTO.username")
-//    })
+    @Caching(put = {
+            @CachePut(value = "UserService::findByName", key = "#userDTO.username")
+    })
     public void updateProfile(UserDTO dto) {
         User savedUser = userRepository.findFirstByName(dto.getUsername());
         if (savedUser == null) {

@@ -31,7 +31,7 @@ public class BucketServiceImpl implements BucketService {
     @Override
     public Bucket getBucketByUser(String name) {
         User user = userService.findByName(name);
-        if (user == null){
+        if (user == null) {
             return null;
         }
         Bucket bucket = user.getBucket();
@@ -80,14 +80,9 @@ public class BucketServiceImpl implements BucketService {
 
     @Override
     public void addProducts(Bucket bucket, List<Long> productIds) {
-//        List<Product> products =
         bucket.getBucketProducts().addAll(getCollectRefProductsByIds(productIds));
-//        List<Product> newProductList = products == null ? new ArrayList<>() : new ArrayList<>(products);
-//        newProductList.addAll(getCollectRefProductsByIds(productIds));
-//        bucket.setProducts(newProductList);
         bucketRepository.save(bucket);
     }
-    //todo посмотреть почему создается список каждый раз   +
 
     @Override
     @Transactional
@@ -97,11 +92,10 @@ public class BucketServiceImpl implements BucketService {
         bucket.getBucketProducts().remove(product);
         bucketRepository.save(bucket);
     }
-    // todo название метода -> remove   +
 
     @Override
     @Transactional
-    public void removeAllProducts(String userName){
+    public void removeAllProducts(String userName) {
         User user = userService.findByName(userName);
         orderService.createOrder(user);
         user.getBucket().setBucketProducts(new ArrayList<>());

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.internal.matchers.Any;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -61,7 +62,7 @@ class UserServiceImplTest {
 
         when(mockUserRepository.findAll()).thenReturn(users);
         when(service.toDto(user)).thenReturn(dto1);
-        when(service.toDto(user1)).thenReturn(dto2);
+
         List<UserDTO> actual = service.getAll();
 
         assertNotNull(actual);
